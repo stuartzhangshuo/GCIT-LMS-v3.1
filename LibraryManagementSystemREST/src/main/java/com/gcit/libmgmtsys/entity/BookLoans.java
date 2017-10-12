@@ -6,6 +6,10 @@ package com.gcit.libmgmtsys.entity;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class BookLoans implements Serializable{
 	
 	private static final long serialVersionUID = 1880265167738841075L;
@@ -23,6 +27,7 @@ public class BookLoans implements Serializable{
 		return borrower;
 	}
 	
+	@XmlElement
 	public void setBorrower(Borrower borrower) {
 		this.borrower = borrower;
 	}
@@ -31,6 +36,7 @@ public class BookLoans implements Serializable{
 		return libraryBranch;
 	}
 	
+	@XmlElement
 	public void setLibraryBranch(LibraryBranch libraryBranch) {
 		this.libraryBranch = libraryBranch;
 	}
@@ -39,6 +45,7 @@ public class BookLoans implements Serializable{
 		return book;
 	}
 	
+	@XmlElement
 	public void setBook(Book book) {
 		this.book = book;
 	}
@@ -47,6 +54,7 @@ public class BookLoans implements Serializable{
 		return dateOut;
 	}
 	
+	@XmlElement
 	public void setDateOut(String dateOut) {
 		this.dateOut = dateOut;
 	}
@@ -55,6 +63,7 @@ public class BookLoans implements Serializable{
 		return dueDate;
 	}
 	
+	@XmlElement
 	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
 	}
@@ -63,6 +72,7 @@ public class BookLoans implements Serializable{
 		return dateIn;
 	}
 	
+	@XmlElement
 	public void setDateIn(String dateIn) {
 		this.dateIn = dateIn;
 	}

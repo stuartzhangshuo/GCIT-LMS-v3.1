@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gcit.libmgmtsys.dao.*;
 import com.gcit.libmgmtsys.entity.*;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping(value = "/admin")
 public class AdminService {
 	// =================================================================================================================
 	// SPRING DAOs
@@ -116,8 +117,9 @@ public class AdminService {
 	/*
 	 * read all books from the database
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/books/keywords={searchString}/pageNo={pageNo}", produces = "application/json")
-	public List<Book> readBooks(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
+	@RequestMapping(value = "/books", method = RequestMethod.GET, produces = "application/json")
+	public List<Book> readBooks(@RequestParam(value = "bookTitle", required = false) String searchString, 
+							    @RequestParam(value = "pageNo") Integer pageNo) throws SQLException {
 		List<Book> books = bookDao.readBooks(null, pageNo);
 		for (Book book : books) {
 			book.setAuthors(authorDao.readAuthorsByBook(book));
@@ -223,8 +225,9 @@ public class AdminService {
 	/*
 	 * read all authors from tbl_author
 	 */
-	@RequestMapping(value = "/authors/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
-	public List<Author> readAuthors(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
+	@RequestMapping(value = "/authors", method = RequestMethod.GET, produces = "application/json")
+	public List<Author> readAuthors(@RequestParam (value = "authorName", required = false) String searchString, 
+									@RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
 		return authorDao.readAuthors(searchString, pageNo);
 	}
 	
@@ -232,7 +235,10 @@ public class AdminService {
 	// =================================================================================================================
 	// GENRE SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * add a new genre to tbl_genre
+	 */
 	@Transactional
 	@RequestMapping(value = "/genres/newGenre", method = RequestMethod.POST, consumes = "application/json")
 	public void addGenre(@RequestBody Genre genre) throws SQLException {
@@ -246,43 +252,66 @@ public class AdminService {
 			genreDao.updateGenreName(genre);
 		}
 	}
-
+	
+	/*
+	 * add a new genre to tbl_genre and return the generated key
+	 */
 	@Transactional
 	@RequestMapping(value = "/genres/newGenre/id", method = RequestMethod.POST, consumes = "application/json")
 	public Integer addGenreWithId(@RequestBody Genre genre) throws SQLException {
 		return genreDao.addGenreWithID(genre);
 	}
-
+	
+	/*
+	 * delete a genre from tbl_genre given genre_id
+	 */
 	@Transactional
 	@RequestMapping(value = "/genres/genreId/", method = RequestMethod.POST, consumes = "application/json")
 	public void deleteGenre(@RequestBody Genre genre) throws SQLException {
 		genreDao.deleteGenre(genre);
 	}
 	
+	/*
+	 * read one genre given genre id
+	 */
 	@RequestMapping(value = "/genres/genreId/{genreId}", method = RequestMethod.GET, produces = "application/json")
 	public Genre readOneGenre(Integer genreId) throws SQLException {
 		return genreDao.readOneGenre(genreId);
 	}
 	
+	/*
+	 * read all genres from tbl_genre or filter result by using keywords and page number
+	 */
 	@RequestMapping(value = "/genres/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
-	public List<Genre> readGenres(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
+	public List<Genre> readGenres(@RequestParam (value = "genreName", required = false) String searchString,
+					   			  @RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
 		return genreDao.readGenres(searchString, pageNo);
 	}
 	
+	/*
+	 * return total number of genres in tbl_genre
+	 */
 	@RequestMapping(value = "/genres/genreCount", method = RequestMethod.GET, produces = "application/json")
 	public Integer getGenresCount() throws SQLException {
 		return genreDao.getGenresCount();
 	}
 	
+	/*
+	 * check if given genre name is already exists in tbl_genre
+	 */
 	@RequestMapping(value = "/genres/genreName/{genreName}", method = RequestMethod.GET, produces = "application/json")
 	public Boolean checkGenreName(@PathVariable String genreName) throws SQLException {
 		return genreDao.checkGenreByName(genreName) != null;
 	}
+	
 
 	// =================================================================================================================
 	// PUBLISHER SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * add a new publisher to tbl_publisher
+	 */
 	@Transactional
 	@RequestMapping(value = "/publishers/newPublisher", method = RequestMethod.POST, consumes = "application/json")
 	public void addPublisher(@RequestBody Publisher publisher) throws SQLException {
@@ -296,13 +325,19 @@ public class AdminService {
 			publisherDao.updatePublisherInfo(publisher);
 		}
 	}
-
+	
+	/*
+	 * delete a publisher from tbl_publisher given pubId
+	 */
 	@Transactional
 	@RequestMapping(value = "/publishers/pubId", method = RequestMethod.POST, consumes = "application/json")
 	public void deletePublisher(@RequestBody Publisher publisher) throws SQLException {
 		publisherDao.deletePublisher(publisher);
 	}
-
+	
+	/*
+	 * update a publisher information in tbl_publisher
+	 */
 	@Transactional
 	@RequestMapping(value = "/publishers/publisherRef", method = RequestMethod.POST, consumes = "application/json")
 	public void updatePublisher(@RequestBody Publisher publisher) throws SQLException {
@@ -315,25 +350,39 @@ public class AdminService {
 		}
 	}
 	
+	/*
+	 * read one publihser information given pubId
+	 */
 	@RequestMapping(value = "/publishers/pubId/{publisherId}", method = RequestMethod.GET, produces = "application/json")
 	public Publisher readOnePublisher(@PathVariable Integer publisherId) throws SQLException {
 		return publisherDao.readOnePublisher(publisherId);
 	}
 	
+	/*
+	 * return how many publishers are there in tbl_publisher
+	 */
 	@RequestMapping(value = "/publishers/publisherCount", method = RequestMethod.GET, produces = "application/json")
 	public Integer getPublishersCount() throws SQLException {
 		return publisherDao.getPublishersCount();
 	}
 	
-	@RequestMapping(value = "/publishers/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
-	public List<Publisher> readPublishers(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
+	/*
+	 * read all publishers or filter results by publisherName and pageNo
+	 */
+	@RequestMapping(value = "/publishers", method = RequestMethod.GET, produces = "application/json")
+	public List<Publisher> readPublishers(@RequestParam (value = "publisherName", required = false) String searchString,
+										  @RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
 		return publisherDao.readPublishers(searchString, pageNo);
 	}
 	
+	/*
+	 * check if a publisher name already exists in tbl_publisher
+	 */
 	@RequestMapping(value = "/publishers/pulisherName/{publisherName}", method = RequestMethod.GET, produces = "application/json")
 	public Boolean checkPublisherName(@PathVariable String publisherName) throws SQLException {
 		return publisherDao.checkPublisherByName(publisherName) != null;
 	}
+	
 
 	// =================================================================================================================
 	// BOOK-AUTHOR ASSOCIATION SERVICES
@@ -344,6 +393,7 @@ public class AdminService {
 	public void addBookAuthor(@PathVariable Integer bookId, @PathVariable Integer authorId) throws SQLException {
 		bookAuthorDao.addBookAuthor(bookId, authorId);
 	}
+	
 
 	// =================================================================================================================
 	// BOOK-GENRE ASSOCIATION SERVICES

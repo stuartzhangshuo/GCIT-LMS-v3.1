@@ -6,6 +6,10 @@ package com.gcit.libmgmtsys.entity;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class BookCopies implements Serializable{
 	
 	private static final long serialVersionUID = 7061771541509860716L;
@@ -17,21 +21,30 @@ public class BookCopies implements Serializable{
 	public Book getBook() {
 		return book;
 	}
+	
+	@XmlElement
 	public void setBook(Book book) {
 		this.book = book;
 	}
+	
 	public LibraryBranch getLibraryBranch() {
 		return libraryBranch;
 	}
+	
+	@XmlElement
 	public void setLibraryBranch(LibraryBranch libraryBranch) {
 		this.libraryBranch = libraryBranch;
 	}
+	
 	public Integer getNoOfCopies() {
 		return noOfCopies;
 	}
+	
+	@XmlElement
 	public void setNoOfCopies(Integer noOfCopies) {
 		this.noOfCopies = noOfCopies;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -41,6 +54,7 @@ public class BookCopies implements Serializable{
 		result = prime * result + ((noOfCopies == null) ? 0 : noOfCopies.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

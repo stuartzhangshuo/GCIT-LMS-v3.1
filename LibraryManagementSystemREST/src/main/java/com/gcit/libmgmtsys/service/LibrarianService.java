@@ -19,6 +19,7 @@ import com.gcit.libmgmtsys.dao.*;
 import com.gcit.libmgmtsys.entity.*;
 
 @RestController
+@RequestMapping(value = "/librarian")
 public class LibrarianService {
 	// =================================================================================================================
 	// SPRING DAOs

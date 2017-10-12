@@ -7,6 +7,10 @@ package com.gcit.libmgmtsys.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Borrower implements Serializable{
 	
 	private static final long serialVersionUID = -6123018515512564184L;
@@ -21,7 +25,8 @@ public class Borrower implements Serializable{
 	public Integer getCardNo() {
 		return cardNo;
 	}
-
+	
+	@XmlElement
 	public void setCardNo(Integer cardNo) {
 		this.cardNo = cardNo;
 	}
@@ -29,7 +34,8 @@ public class Borrower implements Serializable{
 	public String getName() {
 		return name;
 	}
-
+	
+	@XmlElement
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -37,7 +43,8 @@ public class Borrower implements Serializable{
 	public String getAddress() {
 		return address;
 	}
-
+	
+	@XmlElement
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -45,7 +52,8 @@ public class Borrower implements Serializable{
 	public String getPhone() {
 		return phone;
 	}
-
+	
+	@XmlElement
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
@@ -53,7 +61,8 @@ public class Borrower implements Serializable{
 	public List<BookLoans> getBookLoans() {
 		return bookLoans;
 	}
-
+	
+	@XmlElement
 	public void setBookLoans(List<BookLoans> bookLoans) {
 		this.bookLoans = bookLoans;
 	}

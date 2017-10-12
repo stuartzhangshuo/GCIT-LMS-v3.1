@@ -7,6 +7,10 @@ package com.gcit.libmgmtsys.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Genre implements Serializable{
 
 	private static final long serialVersionUID = -5886686995469578362L;
@@ -24,6 +28,7 @@ public class Genre implements Serializable{
 	/**
 	 * @param genreId the genreId to set
 	 */
+	@XmlElement
 	public void setGenreId(Integer genreId) {
 		this.genreId = genreId;
 	}
@@ -36,6 +41,7 @@ public class Genre implements Serializable{
 	/**
 	 * @param genreName the genreName to set
 	 */
+	@XmlElement
 	public void setGenreName(String genreName) {
 		this.genreName = genreName;
 	}
@@ -48,6 +54,7 @@ public class Genre implements Serializable{
 	/**
 	 * @param books the books to set
 	 */
+	@XmlElement
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}

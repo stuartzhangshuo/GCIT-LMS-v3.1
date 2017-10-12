@@ -19,6 +19,7 @@ import com.gcit.libmgmtsys.dao.*;
 import com.gcit.libmgmtsys.entity.*;
 
 @RestController
+@RequestMapping(value = "/Borrower")
 public class BorrowerService {
 	// =================================================================================================================
 	// SPRING DAOs
@@ -41,7 +42,7 @@ public class BorrowerService {
 	
 	
 	// =================================================================================================================
-	// TRANSACTIONS
+	// POST
 	// =================================================================================================================
 	
 	//insert or update (check-out or check-in) a book loan based on if dateOut attribute is NULL
@@ -66,7 +67,7 @@ public class BorrowerService {
 	
 	
 	// =================================================================================================================
-	// EXTRACTIONS
+	// GET
 	// =================================================================================================================
 	
 	//read ALL books information

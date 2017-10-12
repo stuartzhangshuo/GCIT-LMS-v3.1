@@ -7,6 +7,10 @@ package com.gcit.libmgmtsys.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class LibraryBranch implements Serializable{
 	
 	private static final long serialVersionUID = -1785915742873402841L;
@@ -25,6 +29,7 @@ public class LibraryBranch implements Serializable{
 	/**
 	 * @param branchId the branchId to set
 	 */
+	@XmlElement
 	public void setBranchId(Integer branchId) {
 		this.branchId = branchId;
 	}
@@ -37,6 +42,7 @@ public class LibraryBranch implements Serializable{
 	/**
 	 * @param branchName the branchName to set
 	 */
+	@XmlElement
 	public void setBranchName(String branchName) {
 		this.branchName = branchName;
 	}
@@ -49,6 +55,7 @@ public class LibraryBranch implements Serializable{
 	/**
 	 * @param branchAddress the branchAddress to set
 	 */
+	@XmlElement
 	public void setBranchAddress(String branchAddress) {
 		this.branchAddress = branchAddress;
 	}
@@ -61,6 +68,7 @@ public class LibraryBranch implements Serializable{
 	/**
 	 * @param bookLoans the bookLoans to set
 	 */
+	@XmlElement
 	public void setBookLoans(List<BookLoans> bookLoans) {
 		this.bookLoans = bookLoans;
 	}
@@ -73,6 +81,7 @@ public class LibraryBranch implements Serializable{
 	/**
 	 * @param bookCopies the bookCopies to set
 	 */
+	@XmlElement
 	public void setBookCopies(List<BookCopies> bookCopies) {
 		this.bookCopies = bookCopies;
 	}
