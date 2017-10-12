@@ -35,7 +35,7 @@ public class LibrarianService {
 	
 	
 	// =================================================================================================================
-	// TRANSACTIONS
+	// POST
 	// =================================================================================================================
 	
 	//update one library branch's information
@@ -61,12 +61,13 @@ public class LibrarianService {
 	
 
 	// =================================================================================================================
-	// EXTRACTIONS
+	// GET
 	// =================================================================================================================
 	
 	//read one book information given book id
-	@RequestMapping(value = "/readOneBook/{bookId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, value = "/readOneBook/{bookId}", produces = "application/json")
 	public Book readOneBook(@PathVariable Integer bookId) throws SQLException {
+		Book book = bookDao.readOneBook(bookId);
 		return bookDao.readOneBook(bookId);
 	}
 	

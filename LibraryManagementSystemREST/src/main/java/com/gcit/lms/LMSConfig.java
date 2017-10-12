@@ -41,11 +41,6 @@ public class LMSConfig {
 	}
 	
 	@Bean
-	public BookAuthorDAO bookAuthorDao() {
-		return new BookAuthorDAO();
-	}
-	
-	@Bean
 	public BookCopiesDAO bookCopiesDao() {
 		return new BookCopiesDAO();
 	}
@@ -53,11 +48,6 @@ public class LMSConfig {
 	@Bean
 	public BookDAO bookDao() {
 		return new BookDAO();
-	}
-	
-	@Bean
-	public BookGenreDAO bookGenreDao() {
-		return new BookGenreDAO();
 	}
 	
 	@Bean
@@ -98,6 +88,16 @@ public class LMSConfig {
 	@Bean
 	public BorrowerService borrowerService() {
 		return new BorrowerService();
+	}
+	
+	@Bean
+	public BookAuthorDAO bookAuthorDao() {
+		return new BookAuthorDAO();
+	}
+	
+	@Bean
+	public BookGenreDAO bookGenreDao() {
+		return new BookGenreDAO();
 	}
 	
 	@Bean

@@ -55,6 +55,16 @@ public class GenreDAO extends BaseDAO implements ResultSetExtractor<List<Genre>>
 		return template.queryForObject("SELECT COUNT(*) as COUNT FROM tbl_genre", Integer.class);
 	}
 	
+	//read one genre by genre id
+		public Genre readOneGenre(Integer genreId) throws SQLException {
+			List<Genre> genres = template.query("SELECT * FROM tbl_genre WHERE genre_id = ?", 
+					new Object[] {genreId}, this);
+			if (genres != null) {
+				return genres.get(0);
+			}
+			return null;
+		}
+	
 	//get all genres or all genres have a similar name to input name
 	public List<Genre> readGenres(String genreName, Integer pageNo) throws SQLException {
 		setPageNo(pageNo);
@@ -67,14 +77,9 @@ public class GenreDAO extends BaseDAO implements ResultSetExtractor<List<Genre>>
 		}
 	}
 	
-	//read one genre by genre id
-	public Genre readOneGenre(Integer genreId) throws SQLException {
-		List<Genre> genres = template.query("SELECT * FROM tbl_genre WHERE genre_id = ?", 
-				new Object[] {genreId}, this);
-		if (genres != null) {
-			return genres.get(0);
-		}
-		return null;
+	public List<Genre> readGenresByBook(Book book) {
+		return template.query("SELECT * FROM tbl_genre WHERE genre_id IN (SELECT genre_id FROM tbl_book_genres WHERE bookId = ?)",
+				new Object[] {book.getBookId()}, this);
 	}
 	
 	//remove all genre book associations in tbl_book_genres of given genre

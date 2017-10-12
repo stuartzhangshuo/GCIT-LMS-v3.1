@@ -17,68 +17,49 @@ import com.gcit.libmgmtsys.entity.LibraryBranch;
 public class BookCopiesDAO extends BaseDAO implements ResultSetExtractor<List<BookCopies>>{
 	//insert a book copies association
 	public void addBookCopies(BookCopies bookCopies) throws SQLException {
+		Integer noOfCopies = bookCopies.getNoOfCopies();
+		Integer bookId     = bookCopies.getBook().getBookId();
+		Integer branchId   = bookCopies.getLibraryBranch().getBranchId();
 		template.update("INSERT INTO tbl_book_copies (bookId, branchId, noOfCopies) VALUES(?, ?, ?)",
-				new Object[] {bookCopies.getBook().getBookId(), bookCopies.getLibraryBranch().getBranchId(), bookCopies.getNoOfCopies()});
+				new Object[] {bookId, branchId, noOfCopies});
 	}
 	
 	//update a book copies association
 	public void updateBookCopies(BookCopies bookCopies) throws SQLException {
+		Integer noOfCopies = bookCopies.getNoOfCopies();
+		Integer bookId     = bookCopies.getBook().getBookId();
+		Integer branchId   = bookCopies.getLibraryBranch().getBranchId();
 		template.update("UPDATE tbl_book_copies SET noOfCopies = ? WHERE bookId = ? AND branchId = ?",
-				new Object[] {bookCopies.getNoOfCopies(), bookCopies.getBook().getBookId(), bookCopies.getLibraryBranch().getBranchId()});
+				new Object[] {noOfCopies, bookId, branchId});
 	}
 	
 	//return total number of copies for a book in all libraries.
 	public List<BookCopies> getNoOfCopies(Integer bookId) throws SQLException {
-		return template.query("SELECT bookId, branchId, sum(noOfCopies) as noOfCopies FROM tbl_book_copies WHERE bookId = ?", 
+		return template.query("SELECT sum(noOfCopies) as noOfCopies FROM tbl_book_copies WHERE bookId = ?", 
 				new Object[] {bookId}, this);
 	}
 	
+	//check if a book record exist in a library branch in tbl_book_copies
 	public List<BookCopies> checkBookCopies(BookCopies bookCopy) throws SQLException {
-		String sql = "SELECT * FROM tbl_book_copies WHERE bookId = ? AND branchId = ?";
-		return template.query(sql, new Object[] {bookCopy.getBook().getBookId(), bookCopy.getLibraryBranch().getBranchId()}, this);
+		return template.query("SELECT * FROM tbl_book_copies WHERE bookId = ? AND branchId = ?", 
+				new Object[] {bookCopy.getBook().getBookId(), bookCopy.getLibraryBranch().getBranchId()}, this);
 	}
 	
-//	//return total number of book copies in a library branch.
-//	public Integer getNoOfCopiesInBranch(Integer boodId, Integer branchId) {
-//		
-//	}
-
-//	@Override
-//	protected List<BookCopies> parseFirstLevelData(ResultSet rs) throws SQLException {
-//		List<BookCopies> bookCopies = new ArrayList<>();
-//		while (rs.next() && rs.getInt("bookId") != 0) {
-//			BookCopies bookCopy = new BookCopies();
-//			Book 		  	 book 		   	  = new Book();
-//			LibraryBranch 	 libraryBranch 	  = new LibraryBranch();
-//			BookDAO 		 bookDao 	      = new BookDAO(conn);
-//			LibraryBranchDAO libraryBranchDao = new LibraryBranchDAO(conn);
-//			
-//			book 		  = bookDao.readOneBookFirstLevel(rs.getInt("bookId"));
-//			libraryBranch = libraryBranchDao.readOneLibrayBranchFirstLevel(rs.getInt("branchId"));
-//			
-//			bookCopy.setBook(book);
-//			bookCopy.setLibraryBranch(libraryBranch);
-//			bookCopy.setNoOfCopies(rs.getInt("noOfCopies"));
-//			bookCopies.add(bookCopy);
-//		}
-//		return bookCopies;
-//	}
-
+	public List<BookCopies> readBookCopiesByBook(Book book) {
+		return template.query("SELECT * FROM tbl_book_copies WHERE bookId = ?",
+				new Object[] {book.getBookId()}, this);
+	}
+	
 	@Override
 	public List extractData(ResultSet rs) throws SQLException {
 		List<BookCopies> bookCopies = new ArrayList<>();
 		while (rs.next() && rs.getInt("bookId") != 0) {
-			BookCopies bookCopy = new BookCopies();
-			Book 		  	 book 		   	  = new Book();
-			LibraryBranch 	 libraryBranch 	  = new LibraryBranch();
+			BookCopies 		 bookCopy 	   = new BookCopies();
+			Book 		  	 book 		   = new Book();
+			LibraryBranch 	 libraryBranch = new LibraryBranch();
+			
 			book.setBookId(rs.getInt("bookId"));
 			libraryBranch.setBranchId(rs.getInt("branchId"));
-//			BookDAO 		 bookDao 	      = new BookDAO(conn);
-//			LibraryBranchDAO libraryBranchDao = new LibraryBranchDAO(conn);
-			
-//			book 		  = bookDao.readOneBookFirstLevel(rs.getInt("bookId"));
-//			libraryBranch = libraryBranchDao.readOneLibrayBranchFirstLevel(rs.getInt("branchId"));
-			
 			bookCopy.setBook(book);
 			bookCopy.setLibraryBranch(libraryBranch);
 			bookCopy.setNoOfCopies(rs.getInt("noOfCopies"));
@@ -86,5 +67,4 @@ public class BookCopiesDAO extends BaseDAO implements ResultSetExtractor<List<Bo
 		}
 		return bookCopies;
 	}
-
 }

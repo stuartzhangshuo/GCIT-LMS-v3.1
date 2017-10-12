@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import com.gcit.libmgmtsys.entity.Book;
 import com.gcit.libmgmtsys.entity.BookLoans;
 import com.gcit.libmgmtsys.entity.Borrower;
 
@@ -40,11 +41,6 @@ public class BorrowerDAO extends BaseDAO implements ResultSetExtractor<List<Borr
 		return holder.getKey().intValue();
 	}
 	
-//	public Integer addBorrowerWithID(Borrower borrower) throws SQLException {
-//		return executeUpdateWithID("INSERT INTO tbl_borrower (name, address, phone) VALUES(?, ?, ?)",
-//				new Object[] {borrower.getName(), borrower.getAddress(), borrower.getPhone()});
-//	}
-	
 	//update borrower information
 	public void updateBorrower(Borrower borrower) throws SQLException {
 		template.update("UPDATE tbl_borrower SET name = ?, address = ?, phone = ? WHERE cardNo = ?", 
@@ -57,6 +53,7 @@ public class BorrowerDAO extends BaseDAO implements ResultSetExtractor<List<Borr
 				new Object[] {borrower.getCardNo()});
 	}
 	
+	//read all borrowers' information from tbl_borrower
 	public List<Borrower> readBorrowers(String borrowerName, Integer pageNo) throws SQLException {
 		setPageNo(pageNo);
 		if (borrowerName != null && !borrowerName.isEmpty()) {
@@ -68,43 +65,14 @@ public class BorrowerDAO extends BaseDAO implements ResultSetExtractor<List<Borr
 		}
 	}
 	
-//	@Override
-//	protected List<Borrower> parseFirstLevelData(ResultSet rs) throws SQLException {
-//		List<Borrower> borrowers = new ArrayList<>();
-//		while (rs.next()) {
-//			Borrower borrower = new Borrower();
-//			borrower.setCardNo(rs.getInt("cardNo"));
-//			borrower.setName(rs.getString("name"));
-//			borrower.setAddress(rs.getString("address"));
-//			borrower.setPhone(rs.getString("phone"));
-//			borrowers.add(borrower);
-//		}
-//		return borrowers;
-//	}
-
-	@Override
-	public List<Borrower> extractData(ResultSet rs) throws SQLException {
-//		String sql = "SELECT b.bookId, b.title " + 
-//					 "FROM   tbl_book b, tbl_book_loans bl " + 
-//					 "WHERE  bl.cardNo = ? AND b.bookId = bl.bookId AND bl.dateIn IS NULL";
-//		String sql = "SELECT * FROM tbl_book_loans WHERE cardNo = ? AND dateIn IS NULL";
-//		BookLoansDAO bookLoansDao = new BookLoansDAO(conn);
-		List<Borrower> borrowers = new ArrayList<>();
-		while (rs.next()) {
-			Borrower borrower = new Borrower();
-			borrower.setCardNo(rs.getInt("cardNo"));
-			borrower.setName(rs.getString("name"));
-			borrower.setAddress(rs.getString("address"));
-			borrower.setPhone(rs.getString("phone"));
-			List<BookLoans> bookLoans = new ArrayList<>();
-//			bookLoans = bookLoansDao.executeFirstLevelQuery(sql, new Object[] {borrower.getCardNo()});
-			borrower.setBookLoans(bookLoans);
-			borrowers.add(borrower);
-		}
-		return borrowers;
+	//read all borrower's information who have checked out the given book.
+	public List<Borrower> readBorrowersByBook(Book book) throws SQLException {
+		return template.query("SELECT * FROM tbl_borrower WHERE cardNo IN (SELECT cardNo FROM tbl_book_loans WHERE bookId = ?)",
+				new Object[] {book.getBookId()}, this);
 	}
-
-	public Borrower readOneBorrowerFirstLevel(Integer cardNo) throws SQLException {
+	
+	//read one borrower's information from tbl_borrower given cardNo
+	public Borrower readOneBorrower(Integer cardNo) throws SQLException {
 		List<Borrower> borrowers = template.query("SELECT * FROM tbl_borrower WHERE cardNo = ?", 
 				new Object[] {cardNo}, this);
 		if (borrowers != null) {
@@ -112,7 +80,8 @@ public class BorrowerDAO extends BaseDAO implements ResultSetExtractor<List<Borr
 		}
 		return null;
 	}
-
+	
+	//check if a borrower's name already exists in the database
 	public List<Borrower> checkBorrowerByName(String borrowerName) throws SQLException {
 		List<Borrower> borrowers = template.query("SELECT * FROM tbl_borrower WHERE name = ?", 
 				new Object[] {borrowerName}, this);
@@ -122,14 +91,25 @@ public class BorrowerDAO extends BaseDAO implements ResultSetExtractor<List<Borr
 		return null;
 	}
 
-	public Borrower readOneBorrower(Integer cardNo) throws SQLException {
-		List<Borrower> borrowers = template.query("SELECT * FROM tbl_borrower WHERE cardNo = ?", 
-				new Object[] {cardNo}, this);
-		if (borrowers != null) {
-			return borrowers.get(0);
+	@Override
+	public List<Borrower> extractData(ResultSet rs) throws SQLException {
+		List<Borrower> borrowers = new ArrayList<>();
+		while (rs.next()) {
+			Borrower borrower = new Borrower();
+			borrower.setCardNo(rs.getInt("cardNo"));
+			borrower.setName(rs.getString("name"));
+			borrower.setAddress(rs.getString("address"));
+			borrower.setPhone(rs.getString("phone"));
+			List<BookLoans> bookLoans = new ArrayList<>();
+			borrower.setBookLoans(bookLoans);
+			borrowers.add(borrower);
 		}
-		return null;
+		return borrowers;
 	}
+
+	
+
+	
 
 	
 }

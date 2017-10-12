@@ -19,6 +19,22 @@ public abstract class BaseDAO<T> {
 	private Integer pageNo;
 	private Integer pageSize = 10;
 	
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+	
 //	//Initialize DAO with a given connection object from service layer
 //	public BaseDAO(Connection conn) {
 //		BaseDAO.conn = conn;
@@ -107,21 +123,4 @@ public abstract class BaseDAO<T> {
 //	
 //	//Definition for parsing a result set for an entity's ALL properties
 //	protected abstract List<T> parseData(ResultSet rs) throws SQLException;
-	
-	
-	public Integer getPageNo() {
-		return pageNo;
-	}
-
-	public void setPageNo(Integer pageNo) {
-		this.pageNo = pageNo;
-	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
 }

@@ -7,25 +7,33 @@ package com.gcit.libmgmtsys.entity;
 import java.io.Serializable;
 import java.util.*;
 
-public class Book implements Serializable{
-	
+public class Book implements Serializable {
+
 	private static final long serialVersionUID = 8947870066099291812L;
-	
-	private Integer	  bookId;
-	private String 	  title;
-	private Publisher 	   publisher;
+
+	private Integer   bookId;
+	private String    title;
+	private Publisher publisher;
+	// 2nd level
 	private List<Author>   authors;
 	private List<Genre>    genres;
 	private List<Borrower> borrowers;
-	private HashMap<Integer, Integer> branchCopies;	//branchId, noOfCopies
+	// Customized
+	private HashMap<Integer, Integer> branchCopies; // branchId, noOfCopies
 	private Integer totalNumOfCopies;
-	
+
 	public HashMap<Integer, Integer> getBranchCopies() {
 		return branchCopies;
 	}
 
-	public void setBranchCopies(HashMap<Integer, Integer> branchCopies) {
-		this.branchCopies = branchCopies;
+	public void setBranchCopies(List<BookCopies> bookCopies) {
+		branchCopies = new HashMap<>();
+		Integer count = 0;
+		for (BookCopies bookCopy : bookCopies) {
+			count += bookCopy.getNoOfCopies();
+			branchCopies.put(bookCopy.getLibraryBranch().getBranchId(), bookCopy.getNoOfCopies());
+		}
+		totalNumOfCopies = count;
 	}
 
 	public void setTotalNumOfCopies(Integer totalNumOfCopies) {
@@ -114,5 +122,5 @@ public class Book implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 }

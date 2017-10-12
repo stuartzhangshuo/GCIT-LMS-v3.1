@@ -41,24 +41,12 @@ public class BookLoansDAO extends BaseDAO implements ResultSetExtractor<List<Boo
 		return holder.getKey().intValue();
 	}
 	
-//	public Integer addBookLoansWithID(BookLoans bookLoan) throws SQLException {
-//		return executeUpdateWithID("INSERT INTO tbl_book_loans (bookId, branchId, cardNo, dateOut, dueDate) "
-//				+ "VALUES(?, ?, ?, NOW(), NOW() + INTERVAL 7 DAY)",
-//				new Object[] {bookLoan.getBook().getBookId(), bookLoan.getLibraryBranch().getBranchId(), bookLoan.getBorrower().getCardNo()});
-//	}
-	
 	//update the check-in
 	public void updateBookLoan(BookLoans bookLoan) throws SQLException {
 		template.update("UPDATE tbl_book_loans SET dateIn = NOW() "
 				+ "WHERE bookId = ? AND branchId = ? AND cardNo = ? AND dateOut = ?", 
 				new Object[] {bookLoan.getBook().getBookId(), bookLoan.getLibraryBranch().getBranchId(), bookLoan.getBorrower().getCardNo(), bookLoan.getDateOut()});
 	}
-	
-//	public void updateBookLoan(BookLoans bookLoan) throws SQLException {
-//		template.update("UPDATE tbl_book_loans SET dueDate = DATE_ADD(dueDate, INTERVAL 7 DAY) WHERE bookId = ? AND branchId = ? AND cardNo = ? AND dateOut = ?",
-//				new Object[] {bookLoan.getBook().getBookId(), bookLoan.getLibraryBranch().getBranchId(),
-//							  bookLoan.getBorrower().getCardNo(), bookLoan.getDateOut()});
-//	}
 	
 	//Override the due date of a book loan for 7 days.
 	public void overrideBookLoan(BookLoans bookLoan) throws SQLException {
