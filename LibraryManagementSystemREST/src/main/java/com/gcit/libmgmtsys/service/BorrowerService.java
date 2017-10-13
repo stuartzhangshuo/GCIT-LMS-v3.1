@@ -71,25 +71,25 @@ public class BorrowerService {
 	// =================================================================================================================
 	
 	//read ALL books information
-	@RequestMapping(value = "/readBooks_borrower/{searchString}/{pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readBooks_borrower/{searchString}/{pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Book> readBooks(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return bookDao.readBooks(searchString, pageNo);
 	}
 
 	//read ALL library branch information
-	@RequestMapping(value = "/readLibraryBranches_borrower/{searchString}/{pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readLibraryBranches_borrower/{searchString}/{pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<LibraryBranch> readLibraryBranches(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return libraryBranchDao.readLibraryBranches(searchString, pageNo);
 	}
 	
 	//read ONE borrower information given cardNo
-	@RequestMapping(value = "/readOneBorrower_borrower/{cardNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readOneBorrower_borrower/{cardNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Borrower readOneBorrower(@PathVariable Integer cardNo) throws SQLException {
 		return borrowerDao.readOneBorrower(cardNo);
 	}
 	
 	//read ONE book loan information given cardNo and branchId
-	@RequestMapping(value = "/readOneBookLoan_borrower/{cardNo}/{branchId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readOneBookLoan_borrower/{cardNo}/{branchId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<BookLoans> readOneBookLoan(@PathVariable Integer cardNo, @PathVariable Integer branchId) throws SQLException {
 		return bookLoansDao.readOneBookLoan(cardNo, branchId);
 	}

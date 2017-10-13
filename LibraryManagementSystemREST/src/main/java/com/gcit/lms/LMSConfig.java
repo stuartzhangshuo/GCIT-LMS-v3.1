@@ -3,9 +3,12 @@ package com.gcit.lms;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.gcit.libmgmtsys.dao.*;
 import com.gcit.libmgmtsys.service.AdminService;
@@ -13,11 +16,22 @@ import com.gcit.libmgmtsys.service.BorrowerService;
 import com.gcit.libmgmtsys.service.LibrarianService;
 
 @Configuration
-public class LMSConfig {
+public class LMSConfig extends WebMvcConfigurerAdapter{
 	private final String DRIVER   = "com.mysql.cj.jdbc.Driver";
 	private final String URL      = "jdbc:mysql://localhost/library?useSSL = false";
 	private final String USER     = "root";
 	private final String PASSWORD = "root";
+	
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		configurer.favorPathExtension(false).
+		favorParameter(true).parameterName("mediaType").
+		ignoreAcceptHeader(true).
+		useJaf(false).
+		defaultContentType(MediaType.APPLICATION_JSON).
+		mediaType("xml", MediaType.APPLICATION_XML).
+		mediaType("json", MediaType.APPLICATION_JSON);
+	}
 	
 	@Bean
 	public BasicDataSource dataSource() {

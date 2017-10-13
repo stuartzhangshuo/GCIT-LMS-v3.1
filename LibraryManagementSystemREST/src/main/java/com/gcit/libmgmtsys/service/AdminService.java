@@ -117,7 +117,7 @@ public class AdminService {
 	/*
 	 * read all books from the database
 	 */
-	@RequestMapping(value = "/books", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/books", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Book> readBooks(@RequestParam(value = "bookTitle", required = false) String searchString, 
 							    @RequestParam(value = "pageNo") Integer pageNo) throws SQLException {
 		List<Book> books = bookDao.readBooks(null, pageNo);
@@ -133,7 +133,7 @@ public class AdminService {
 	/*
 	 * read one book from the database given bookId
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/books/bookId/{bookId}", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, value = "/books/bookId/{bookId}", produces = {"application/json", "application/xml"})
 	public Book readOneBook(@PathVariable Integer bookId) throws SQLException {
 		Book book = bookDao.readOneBook(bookId);
 		book.setAuthors(authorDao.readAuthorsByBook(book));
@@ -146,7 +146,7 @@ public class AdminService {
 	/*
 	 * check if a book's title already exists in the database
 	 */
-	@RequestMapping(value = "/books/bookTitle/{bookTitle}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/books/bookTitle/{bookTitle}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkBookName(@PathVariable String bookTitle) throws SQLException {
 		return bookDao.checkBookByName(bookTitle) != null;
 	}
@@ -154,7 +154,7 @@ public class AdminService {
 	/*
 	 * return total number of books in tbl_book.
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/books/pageCount/bookId/{bookId}", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, value = "/books/pageCount/bookId/{bookId}", produces = {"application/json", "application/xml"})
 	public Integer getBooksCount() throws SQLException {
 		return bookDao.getBooksCount();
 	}
@@ -201,7 +201,7 @@ public class AdminService {
 	/*
 	 * read one author information given author id
 	 */
-	@RequestMapping(value = "/authors/authorId/{authorId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/authors/authorId/{authorId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Author readOneAuthor(@PathVariable Integer authorId) throws SQLException {
 		return authorDao.readOneAuthor(authorId);
 	}
@@ -209,7 +209,7 @@ public class AdminService {
 	/*
 	 * Check if an author name already exist in the database
 	 */
-	@RequestMapping(value = "/authors/authorName/{authorName}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/authors/authorName/{authorName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkAuthorName(@PathVariable String authorName) throws SQLException {
 		return authorDao.checkAuthorByName(authorName) != null;
 	}
@@ -217,7 +217,7 @@ public class AdminService {
 	/*
 	 * count how many authors are there in tbl_author
 	 */
-	@RequestMapping(value = "/authors/authorCount", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/authors/authorCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getAuthorsCount() throws SQLException {
 		return authorDao.getAuthorsCount();
 	}
@@ -225,7 +225,7 @@ public class AdminService {
 	/*
 	 * read all authors from tbl_author
 	 */
-	@RequestMapping(value = "/authors", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/authors", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Author> readAuthors(@RequestParam (value = "authorName", required = false) String searchString, 
 									@RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
 		return authorDao.readAuthors(searchString, pageNo);
@@ -274,7 +274,7 @@ public class AdminService {
 	/*
 	 * read one genre given genre id
 	 */
-	@RequestMapping(value = "/genres/genreId/{genreId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/genres/genreId/{genreId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Genre readOneGenre(Integer genreId) throws SQLException {
 		return genreDao.readOneGenre(genreId);
 	}
@@ -282,7 +282,7 @@ public class AdminService {
 	/*
 	 * read all genres from tbl_genre or filter result by using keywords and page number
 	 */
-	@RequestMapping(value = "/genres/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/genres/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Genre> readGenres(@RequestParam (value = "genreName", required = false) String searchString,
 					   			  @RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
 		return genreDao.readGenres(searchString, pageNo);
@@ -291,7 +291,7 @@ public class AdminService {
 	/*
 	 * return total number of genres in tbl_genre
 	 */
-	@RequestMapping(value = "/genres/genreCount", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/genres/genreCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getGenresCount() throws SQLException {
 		return genreDao.getGenresCount();
 	}
@@ -299,7 +299,7 @@ public class AdminService {
 	/*
 	 * check if given genre name is already exists in tbl_genre
 	 */
-	@RequestMapping(value = "/genres/genreName/{genreName}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/genres/genreName/{genreName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkGenreName(@PathVariable String genreName) throws SQLException {
 		return genreDao.checkGenreByName(genreName) != null;
 	}
@@ -353,7 +353,7 @@ public class AdminService {
 	/*
 	 * read one publihser information given pubId
 	 */
-	@RequestMapping(value = "/publishers/pubId/{publisherId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/publishers/pubId/{publisherId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Publisher readOnePublisher(@PathVariable Integer publisherId) throws SQLException {
 		return publisherDao.readOnePublisher(publisherId);
 	}
@@ -361,7 +361,7 @@ public class AdminService {
 	/*
 	 * return how many publishers are there in tbl_publisher
 	 */
-	@RequestMapping(value = "/publishers/publisherCount", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/publishers/publisherCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getPublishersCount() throws SQLException {
 		return publisherDao.getPublishersCount();
 	}
@@ -369,7 +369,7 @@ public class AdminService {
 	/*
 	 * read all publishers or filter results by publisherName and pageNo
 	 */
-	@RequestMapping(value = "/publishers", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/publishers", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Publisher> readPublishers(@RequestParam (value = "publisherName", required = false) String searchString,
 										  @RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
 		return publisherDao.readPublishers(searchString, pageNo);
@@ -378,7 +378,7 @@ public class AdminService {
 	/*
 	 * check if a publisher name already exists in tbl_publisher
 	 */
-	@RequestMapping(value = "/publishers/pulisherName/{publisherName}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/publishers/pulisherName/{publisherName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkPublisherName(@PathVariable String publisherName) throws SQLException {
 		return publisherDao.checkPublisherByName(publisherName) != null;
 	}
@@ -389,7 +389,7 @@ public class AdminService {
 	// =================================================================================================================
 
 	@Transactional
-	@RequestMapping(value = "/bookAuthors/bookId/{bookId}/authorId/{authorId}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/bookAuthors/bookId/{bookId}/authorId/{authorId}", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
 	public void addBookAuthor(@PathVariable Integer bookId, @PathVariable Integer authorId) throws SQLException {
 		bookAuthorDao.addBookAuthor(bookId, authorId);
 	}
@@ -400,7 +400,7 @@ public class AdminService {
 	// =================================================================================================================
 
 	@Transactional
-	@RequestMapping(value = "/bookGenres/bookId/{bookId}/genreId/{genreId}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/bookGenres/bookId/{bookId}/genreId/{genreId}", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
 	public void addBookGenres(@PathVariable Integer bookId, @PathVariable Integer genreId) throws SQLException {
 		bookGenreDao.addBookGenre(bookId, genreId);
 	}
@@ -438,22 +438,22 @@ public class AdminService {
 		libraryBranchDao.deleteLibraryBranch(branch);
 	}
 	
-	@RequestMapping(value = "/libraryBranches/branchId/{branchId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/libraryBranches/branchId/{branchId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public LibraryBranch readOneBranch(@PathVariable Integer branchId) throws SQLException {
 		return libraryBranchDao.readOneBranch(branchId);
 	}
 	
-	@RequestMapping(value = "/libraryBranches/branchCount", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/libraryBranches/branchCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getLibraryBranchCount() throws SQLException {
 		return libraryBranchDao.getLibraryBranchesCount();
 	}
 	
-	@RequestMapping(value = "/libraryBranches/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/libraryBranches/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<LibraryBranch> readLibraryBranches(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return libraryBranchDao.readLibraryBranches(searchString, pageNo);
 	}
 	
-	@RequestMapping(value = "/libraryBranches/branchName/{branchName}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/libraryBranches/branchName/{branchName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public boolean checkBranchName(String branchName) throws SQLException {
 		return libraryBranchDao.checkBranchByName(branchName) != null;
 	}
@@ -485,17 +485,17 @@ public class AdminService {
 		borrowerDao.updateBorrower(borrower);
 	}
 	
-	@RequestMapping(value = "/borrowers/cardNo/{cardNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/borrowers/cardNo/{cardNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Borrower readOneBorrower(Integer cardNo) throws SQLException {
 		return borrowerDao.readOneBorrower(cardNo);
 	}
 	
-	@RequestMapping(value = "/borrowers/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/borrowers/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Borrower> readBorrowers(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return borrowerDao.readBorrowers(searchString, pageNo);
 	}
 	
-	@RequestMapping(value = "/libraryBranches/borrowerName", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/libraryBranches/borrowerName", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkBorrowerName(@PathVariable String borrowerName) throws SQLException {
 		return borrowerDao.checkBorrowerByName(borrowerName) != null;
 	}
@@ -517,17 +517,17 @@ public class AdminService {
 		bookLoansDao.overrideBookLoan(bookLoan);
 	}
 	
-	@RequestMapping(value = "/bookLoans/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/bookLoans/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<BookLoans> readBookLoans(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return bookLoansDao.readBookLoans(searchString, pageNo);
 	}
 	
-	@RequestMapping(value = "/bookLoans/cardNo/{cardNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/bookLoans/cardNo/{cardNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public BookLoans readOneBookLoan(@PathVariable BookLoans bookLoan) throws SQLException {
 		return bookLoansDao.readOneBookLoan(bookLoan);
 	}
 	
-	@RequestMapping(value = "/bookLoans/loanCount", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/bookLoans/loanCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getBookLoansCount() throws SQLException {
 		return bookLoansDao.getBookLoansCount();
 	}

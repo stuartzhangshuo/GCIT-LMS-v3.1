@@ -66,38 +66,38 @@ public class LibrarianService {
 	// =================================================================================================================
 	
 	//read one book information given book id
-	@RequestMapping(method = RequestMethod.GET, value = "/readOneBook/{bookId}", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, value = "/readOneBook/{bookId}", produces = {"application/json", "application/xml"})
 	public Book readOneBook(@PathVariable Integer bookId) throws SQLException {
 		Book book = bookDao.readOneBook(bookId);
 		return bookDao.readOneBook(bookId);
 	}
 	
 	//read all books by page number
-	@RequestMapping(value = "/readBooks/{searchString}/{pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readBooks/{searchString}/{pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Book> readBooks(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return bookDao.readBooks(searchString, pageNo);
 	}
 	
 	//read one library branch information given branch id
-	@RequestMapping(value = "/readOneBranch/{branchId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readOneBranch/{branchId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public LibraryBranch readOneBranch(@PathVariable Integer branchId) throws SQLException {
 		return libraryBranchDao.readOneBranch(branchId);
 	}
 	
 	//read all library branches by page number
-	@RequestMapping(value = "/readLibraryBranches/{searchString}/{pageNo}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/readLibraryBranches/{searchString}/{pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 		public List<LibraryBranch> readLibraryBranches(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return libraryBranchDao.readLibraryBranches(searchString, pageNo);
 	}
 	
 	//check if a branch name already exists in the database
-	@RequestMapping(value = "/checkBranchName/{branchName}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/checkBranchName/{branchName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkBranchName(@PathVariable String branchName) throws SQLException {
 		return libraryBranchDao.checkBranchByName(branchName) != null;
 	}
 	
 	//check if a book copy pair (bookId, branchId) exist in the databse
-	@RequestMapping(value = "/checkBookCopy", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "/checkBookCopy", method = RequestMethod.GET, consumes = "application/json", produces = {"application/json", "application/xml"})
 	public Boolean checkBookCopy(@RequestBody BookCopies bookCopy) throws SQLException {
 		List<BookCopies> bookCopies = bookCopiesDao.checkBookCopies(bookCopy);
 		if (bookCopies == null || bookCopies.size() == 0) {

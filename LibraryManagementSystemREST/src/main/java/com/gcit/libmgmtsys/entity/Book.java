@@ -9,8 +9,10 @@ import java.util.*;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
+@XmlType(propOrder = {"bookId", "title", "publisher"})
 public class Book implements Serializable {
 
 	private static final long serialVersionUID = 8947870066099291812L;
