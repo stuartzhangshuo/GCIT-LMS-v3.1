@@ -9,10 +9,9 @@ import java.util.*;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-@XmlType(propOrder = {"bookId", "title", "publisher"})
+//@XmlType(propOrder = {"bookId", "title", "publisher"})
 public class Book implements Serializable {
 
 	private static final long serialVersionUID = 8947870066099291812L;
@@ -27,12 +26,12 @@ public class Book implements Serializable {
 	// Customized
 	private HashMap<Integer, Integer> branchCopies; // branchId, noOfCopies
 	private Integer totalNumOfCopies;
-
+	
+	@XmlElement
 	public HashMap<Integer, Integer> getBranchCopies() {
 		return branchCopies;
 	}
 	
-	@XmlElement
 	public void setBranchCopies(List<BookCopies> bookCopies) {
 		branchCopies = new HashMap<>();
 		Integer count = 0;
@@ -43,65 +42,66 @@ public class Book implements Serializable {
 		totalNumOfCopies = count;
 	}
 	
-	@XmlElement
 	public void setTotalNumOfCopies(Integer totalNumOfCopies) {
 		this.totalNumOfCopies = totalNumOfCopies;
 	}
-
+	
+	@XmlElement
 	public Integer getTotalNumOfCopies() {
 		return totalNumOfCopies;
 	}
-
+	
+	@XmlElement
 	public Publisher getPublisher() {
 		return publisher;
 	}
+
 	
-	@XmlElement
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
-
+	
+	@XmlElement
 	public Integer getBookId() {
 		return bookId;
 	}
 	
-	@XmlElement
 	public void setBookId(Integer bookId) {
 		this.bookId = bookId;
 	}
-
+	
+	@XmlElement
 	public String getTitle() {
 		return title;
 	}
 	
-	@XmlElement
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
+	
+	@XmlElement
 	public List<Author> getAuthors() {
 		return authors;
 	}
 	
-	@XmlElement
 	public void setAuthors(List<Author> authors) {
 		this.authors = authors;
 	}
-
+	
+	@XmlElement
 	public List<Genre> getGenres() {
 		return genres;
 	}
 	
-	@XmlElement
 	public void setGenres(List<Genre> genres) {
 		this.genres = genres;
 	}
-
+	
+	@XmlElement
 	public List<Borrower> getBorrowers() {
 		return borrowers;
 	}
 	
-	@XmlElement
 	public void setBorrowers(List<Borrower> borrowers) {
 		this.borrowers = borrowers;
 	}

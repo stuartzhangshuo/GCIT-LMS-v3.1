@@ -62,7 +62,7 @@ public class AdminService {
 	// =================================================================================================================
 
 	/*
-	 * Insert a book into the database, and associate publisher, authors, and genres
+	 * add a book into the database, and associate publisher, authors, and genres
 	 * with it. If the book id is null, update the book instead of add it.
 	 */
 	@Transactional
@@ -190,6 +190,29 @@ public class AdminService {
 	}
 	
 	/*
+	 * read all authors from tbl_author
+	 */
+	@RequestMapping(value = "/authors", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	public List<Author> readAuthors(@RequestParam (value = "authorName", required = false) String searchString, 
+									@RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
+		List<Author> authors = authorDao.readAuthors(searchString, pageNo);
+		for (Author author : authors) {
+			author.setBooks(bookDao.readBookByAuthor(author));
+		}
+		return authors;
+	}
+	
+	/*
+	 * read one author information given author id
+	 */
+	@RequestMapping(value = "/authors/authorId/{authorId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	public Author readOneAuthor(@PathVariable Integer authorId) throws SQLException {
+		Author author = authorDao.readOneAuthor(authorId);
+		author.setBooks(bookDao.readBookByAuthor(author));
+		return author;
+	}
+	
+	/*
 	 * delete an author given author id
 	 */
 	@Transactional
@@ -198,14 +221,6 @@ public class AdminService {
 		authorDao.deleteAuthor(author);
 	}
 	
-	/*
-	 * read one author information given author id
-	 */
-	@RequestMapping(value = "/authors/authorId/{authorId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public Author readOneAuthor(@PathVariable Integer authorId) throws SQLException {
-		return authorDao.readOneAuthor(authorId);
-	}
-
 	/*
 	 * Check if an author name already exist in the database
 	 */
@@ -222,16 +237,7 @@ public class AdminService {
 		return authorDao.getAuthorsCount();
 	}
 	
-	/*
-	 * read all authors from tbl_author
-	 */
-	@RequestMapping(value = "/authors", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public List<Author> readAuthors(@RequestParam (value = "authorName", required = false) String searchString, 
-									@RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
-		return authorDao.readAuthors(searchString, pageNo);
-	}
 	
-
 	// =================================================================================================================
 	// GENRE SERVICES
 	// =================================================================================================================
@@ -276,7 +282,9 @@ public class AdminService {
 	 */
 	@RequestMapping(value = "/genres/genreId/{genreId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Genre readOneGenre(Integer genreId) throws SQLException {
-		return genreDao.readOneGenre(genreId);
+		Genre genre = genreDao.readOneGenre(genreId);
+		genre.setBooks(bookDao.readBookByGenre(genre));
+		return genre;
 	}
 	
 	/*
@@ -285,7 +293,11 @@ public class AdminService {
 	@RequestMapping(value = "/genres/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Genre> readGenres(@RequestParam (value = "genreName", required = false) String searchString,
 					   			  @RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
-		return genreDao.readGenres(searchString, pageNo);
+		List<Genre> genres = genreDao.readGenres(searchString, pageNo);
+		for (Genre genre :genres) {
+			genre.setBooks(bookDao.readBookByGenre(genre));
+		}
+		return genres;
 	}
 	
 	/*
@@ -355,15 +367,9 @@ public class AdminService {
 	 */
 	@RequestMapping(value = "/publishers/pubId/{publisherId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Publisher readOnePublisher(@PathVariable Integer publisherId) throws SQLException {
-		return publisherDao.readOnePublisher(publisherId);
-	}
-	
-	/*
-	 * return how many publishers are there in tbl_publisher
-	 */
-	@RequestMapping(value = "/publishers/publisherCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public Integer getPublishersCount() throws SQLException {
-		return publisherDao.getPublishersCount();
+		Publisher publisher = publisherDao.readOnePublisher(publisherId);
+		publisher.setBooks(bookDao.readBookByPublisher(publisher));
+		return publisher;
 	}
 	
 	/*
@@ -372,7 +378,19 @@ public class AdminService {
 	@RequestMapping(value = "/publishers", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Publisher> readPublishers(@RequestParam (value = "publisherName", required = false) String searchString,
 										  @RequestParam (value = "pageNo") Integer pageNo) throws SQLException {
-		return publisherDao.readPublishers(searchString, pageNo);
+		List<Publisher> publishers = publisherDao.readPublishers(searchString, pageNo);
+		for (Publisher publisher : publishers) {
+			publisher.setBooks(bookDao.readBookByPublisher(publisher));
+		}
+		return publishers;
+	}
+	
+	/*
+	 * return how many publishers are there in tbl_publisher
+	 */
+	@RequestMapping(value = "/publishers/publisherCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	public Integer getPublishersCount() throws SQLException {
+		return publisherDao.getPublishersCount();
 	}
 	
 	/*
@@ -387,7 +405,10 @@ public class AdminService {
 	// =================================================================================================================
 	// BOOK-AUTHOR ASSOCIATION SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * INSERT a book-author associations into tbl_book_authors
+	 */
 	@Transactional
 	@RequestMapping(value = "/bookAuthors/bookId/{bookId}/authorId/{authorId}", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
 	public void addBookAuthor(@PathVariable Integer bookId, @PathVariable Integer authorId) throws SQLException {
@@ -398,7 +419,10 @@ public class AdminService {
 	// =================================================================================================================
 	// BOOK-GENRE ASSOCIATION SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * INSERT a book-genre associations into tbl_book_genres
+	 */
 	@Transactional
 	@RequestMapping(value = "/bookGenres/bookId/{bookId}/genreId/{genreId}", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
 	public void addBookGenres(@PathVariable Integer bookId, @PathVariable Integer genreId) throws SQLException {
@@ -409,7 +433,10 @@ public class AdminService {
 	// =================================================================================================================
 	// LIBRARY BRANCH SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * CREATE a new library branch into tbl_library_branch, and associate books with it.
+	 */
 	@Transactional
 	@RequestMapping(value = "/libraryBranches/newBranch", method = RequestMethod.POST, consumes = "application/json")
 	public void addLibraryBranch(@RequestBody LibraryBranch branch) throws SQLException {
@@ -425,36 +452,63 @@ public class AdminService {
 			libraryBranchDao.updateLibraryBranch(branch);
 		}
 	}
-
+	
+	/*
+	 * UPDATE the information of a library branch given branch id
+	 */
 	@Transactional
 	@RequestMapping(value = "/libraryBranches/branchRef", method = RequestMethod.POST, consumes = "application/json")
 	public void updateLibraryBranch(@RequestBody LibraryBranch branch) throws SQLException {
 		libraryBranchDao.updateLibraryBranch(branch);
 	}
-
+	
+	/*
+	 * DELETE a library branch given branch id
+	 */
 	@Transactional
 	@RequestMapping(value = "/libraryBranches/branchId", method = RequestMethod.POST, consumes = "application/json")
 	public void deleteBranch(@RequestBody LibraryBranch branch) throws SQLException {
 		libraryBranchDao.deleteLibraryBranch(branch);
 	}
 	
+	/*
+	 * READ ONE library branch information given branch id
+	 */
 	@RequestMapping(value = "/libraryBranches/branchId/{branchId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public LibraryBranch readOneBranch(@PathVariable Integer branchId) throws SQLException {
-		return libraryBranchDao.readOneBranch(branchId);
+		LibraryBranch branch = libraryBranchDao.readOneBranch(branchId);
+		branch.setBookCopies(bookCopiesDao.readBookCopiesByBranch(branch));
+		branch.setBookLoans(bookLoansDao.readBookLoanByBranch(branch));
+		return branch;
 	}
 	
+	/*
+	 * READ total number of library branches in tbl_library_branch
+	 */
 	@RequestMapping(value = "/libraryBranches/branchCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getLibraryBranchCount() throws SQLException {
 		return libraryBranchDao.getLibraryBranchesCount();
 	}
 	
+	/*
+	 * READ all library branches' information from tbl_library_branch
+	 */
 	@RequestMapping(value = "/libraryBranches/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<LibraryBranch> readLibraryBranches(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
-		return libraryBranchDao.readLibraryBranches(searchString, pageNo);
+		List<LibraryBranch> libraryBranches = libraryBranchDao.readLibraryBranches(searchString, pageNo);
+		for (LibraryBranch branch : libraryBranches) {
+			branch.setBookCopies(bookCopiesDao.readBookCopiesByBranch(branch));
+			branch.setBookLoans(bookLoansDao.readBookLoanByBranch(branch));
+		}
+		return libraryBranches;
 	}
 	
+	/*
+	 * READ a library branch name from tbl_library_branch
+	 * @Return TRUE OR FALSE;
+	 */
 	@RequestMapping(value = "/libraryBranches/branchName/{branchName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public boolean checkBranchName(String branchName) throws SQLException {
+	public Boolean checkBranchName(String branchName) throws SQLException {
 		return libraryBranchDao.checkBranchByName(branchName) != null;
 	}
 	
@@ -462,7 +516,10 @@ public class AdminService {
 	// =================================================================================================================
 	// BORROWER SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * CREATE a new borrower in tbl_borrower
+	 */
 	@Transactional
 	@RequestMapping(value = "/borrowers/newBorrower", method = RequestMethod.POST, consumes = "application/json")
 	public void addBorrower(@RequestBody Borrower borrower) throws SQLException {
@@ -472,29 +529,51 @@ public class AdminService {
 			borrowerDao.updateBorrower(borrower);
 		}
 	}
-
+	
+	/*
+	 * DELETE a borrower from tbl_borrower given cardNo
+	 */
 	@Transactional
 	@RequestMapping(value = "/borrowers/borrowerId", method = RequestMethod.POST, consumes = "application/json")
 	public void deleteBorrower(@RequestBody Borrower borrower) throws SQLException {
 		borrowerDao.deleteBorrower(borrower);
 	}
-
+	
+	/*
+	 * UPDATE a borrower's information given cardNo
+	 */
 	@Transactional
 	@RequestMapping(value = "/borrowers/borrowerRef", method = RequestMethod.POST, consumes = "application/json")
 	public void updateBorrower(@RequestBody Borrower borrower) throws SQLException {
 		borrowerDao.updateBorrower(borrower);
 	}
 	
+	/*
+	 * READ ONE borrower's information from tbl_borrower given cardNo
+	 */
 	@RequestMapping(value = "/borrowers/cardNo/{cardNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Borrower readOneBorrower(Integer cardNo) throws SQLException {
-		return borrowerDao.readOneBorrower(cardNo);
+		Borrower borrower = borrowerDao.readOneBorrower(cardNo);
+		borrower.setBookLoans(bookLoansDao.readBookLoanByBorrower(borrower));
+		return borrower;
 	}
 	
+	/*
+	 * READ ALL borrowers' information from tbl_borrower
+	 */
 	@RequestMapping(value = "/borrowers/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Borrower> readBorrowers(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
-		return borrowerDao.readBorrowers(searchString, pageNo);
+		List<Borrower> borrowers = borrowerDao.readBorrowers(searchString, pageNo);
+		for (Borrower borrower : borrowers) {
+			borrower.setBookLoans(bookLoansDao.readBookLoanByBorrower(borrower));
+		}
+		return borrowers;
 	}
 	
+	/*
+	 * READ a borrower's name from tbl_borrower
+	 * @Return TRUE OR FALSE
+	 */
 	@RequestMapping(value = "/libraryBranches/borrowerName", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Boolean checkBorrowerName(@PathVariable String borrowerName) throws SQLException {
 		return borrowerDao.checkBorrowerByName(borrowerName) != null;
@@ -504,29 +583,44 @@ public class AdminService {
 	// =================================================================================================================
 	// BOOK LOAN SERVICES
 	// =================================================================================================================
-
+	
+	/*
+	 * DELETE a book loan from tbl_book_loans given bookId, branchId, cardNo and dateOut
+	 */
 	@Transactional
 	@RequestMapping(value = "/bookLoans/cardNo", method = RequestMethod.POST, consumes = "application/json")
 	public void deleteBookLoan(@RequestBody BookLoans bookLoan) throws SQLException {
 		bookLoansDao.deleteBookLoan(bookLoan);
 	}
-
+	
+	/*
+	 * UPDATE a book loan's dueDate given bookId, branchId, cardNo and dateOut
+	 */
 	@Transactional
 	@RequestMapping(value = "/bookLoans/bookLoanRef", method = RequestMethod.POST, consumes = "application/json")
 	public void overrideBookLoan(@RequestBody BookLoans bookLoan) throws SQLException {
 		bookLoansDao.overrideBookLoan(bookLoan);
 	}
 	
+	/*
+	 * READ ALL book loans' information from tbl_book_loans
+	 */
 	@RequestMapping(value = "/bookLoans/keywords={searchString}/pageNo={pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<BookLoans> readBookLoans(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return bookLoansDao.readBookLoans(searchString, pageNo);
 	}
 	
+	/*
+	 * READ ONE book loan's information given bookId, branchId, cardNo and dateOut
+	 */
 	@RequestMapping(value = "/bookLoans/cardNo/{cardNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public BookLoans readOneBookLoan(@PathVariable BookLoans bookLoan) throws SQLException {
 		return bookLoansDao.readOneBookLoan(bookLoan);
 	}
 	
+	/*
+	 * READ total number of book loans in tbl_book_loans
+	 */
 	@RequestMapping(value = "/bookLoans/loanCount", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Integer getBookLoansCount() throws SQLException {
 		return bookLoansDao.getBookLoansCount();

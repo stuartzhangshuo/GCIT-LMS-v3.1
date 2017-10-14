@@ -45,9 +45,12 @@ public class BorrowerService {
 	// POST
 	// =================================================================================================================
 	
-	//insert or update (check-out or check-in) a book loan based on if dateOut attribute is NULL
+	/*
+	 * INSERT OR UPDATE (check-out or check-in) a book loan based on if dateOut attribute is NULL
+	 */
 	@Transactional
-	@RequestMapping(value = "/updateBookLoan_borrower", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/updateBookLoan_borrower",
+					method = RequestMethod.POST, consumes = "application/json")
 	public void updateBookLoan(@RequestBody BookLoans bookLoan) throws SQLException {
 		Book 	   book 	   = bookDao.readOneBook(bookLoan.getBook().getBookId());
 		BookCopies bookCopy    = new BookCopies();
@@ -65,31 +68,44 @@ public class BorrowerService {
 		}
 	}
 	
-	
 	// =================================================================================================================
 	// GET
 	// =================================================================================================================
 	
-	//read ALL books information
-	@RequestMapping(value = "/readBooks_borrower/{searchString}/{pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	/*
+	 * READ ALL books' information from tbl_book
+	 */
+	@RequestMapping(value = "/readBooks_borrower/{searchString}/{pageNo}",
+					method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<Book> readBooks(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return bookDao.readBooks(searchString, pageNo);
 	}
 
-	//read ALL library branch information
-	@RequestMapping(value = "/readLibraryBranches_borrower/{searchString}/{pageNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	/*
+	 * READ ALL library branches' information from tbl_library_branch
+	 */
+	@RequestMapping(value = "/readLibraryBranches_borrower/{searchString}/{pageNo}",
+					method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<LibraryBranch> readLibraryBranches(@PathVariable String searchString, @PathVariable Integer pageNo) throws SQLException {
 		return libraryBranchDao.readLibraryBranches(searchString, pageNo);
 	}
 	
-	//read ONE borrower information given cardNo
-	@RequestMapping(value = "/readOneBorrower_borrower/{cardNo}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	/*
+	 * READ ONE borrower's information given cardNo
+	 */
+	@RequestMapping(value = "/readOneBorrower_borrower/{cardNo}",
+					method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public Borrower readOneBorrower(@PathVariable Integer cardNo) throws SQLException {
-		return borrowerDao.readOneBorrower(cardNo);
+		Borrower borrower = borrowerDao.readOneBorrower(cardNo);
+		borrower.setBookLoans(bookLoansDao.readBookLoanByBorrower(borrower));
+		return borrower;
 	}
 	
-	//read ONE book loan information given cardNo and branchId
-	@RequestMapping(value = "/readOneBookLoan_borrower/{cardNo}/{branchId}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	/*
+	 * READ ONE book loan's information given cardNo and branchId
+	 */
+	@RequestMapping(value = "/readOneBookLoan_borrower/{cardNo}/{branchId}",
+					method = RequestMethod.GET, produces = {"application/json", "application/xml"})
 	public List<BookLoans> readOneBookLoan(@PathVariable Integer cardNo, @PathVariable Integer branchId) throws SQLException {
 		return bookLoansDao.readOneBookLoan(cardNo, branchId);
 	}

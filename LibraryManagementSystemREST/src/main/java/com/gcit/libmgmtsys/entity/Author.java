@@ -23,39 +23,41 @@ public class Author implements Serializable{
 	/**
 	 * @return the authorId
 	 */
+	@XmlElement
 	public Integer getAuthorId() {
 		return authorId;
 	}
 	/**
 	 * @param authorId the authorId to set
 	 */
-	@XmlElement
+	
 	public void setAuthorId(Integer authorId) {
 		this.authorId = authorId;
 	}
 	/**
 	 * @return the authorName
 	 */
+	@XmlElement
 	public String getAuthorName() {
 		return authorName;
 	}
 	/**
 	 * @param authorName the authorName to set
 	 */
-	@XmlElement
+	
 	public void setAuthorName(String authorName) {
 		this.authorName = authorName;
 	}
 	/**
 	 * @return the books
 	 */
+	@XmlElement
 	public List<Book> getBooks() {
 		return books;
 	}
 	/**
 	 * @param books the books to set
 	 */
-	@XmlElement
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}

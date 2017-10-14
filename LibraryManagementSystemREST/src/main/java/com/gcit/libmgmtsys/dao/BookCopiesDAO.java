@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import com.gcit.libmgmtsys.entity.Book;
 import com.gcit.libmgmtsys.entity.BookCopies;
 import com.gcit.libmgmtsys.entity.LibraryBranch;
+import com.gcit.libmgmtsys.entity.Publisher;
 
 @SuppressWarnings("rawtypes")
 public class BookCopiesDAO extends BaseDAO implements ResultSetExtractor<List<BookCopies>>{
@@ -48,6 +49,16 @@ public class BookCopiesDAO extends BaseDAO implements ResultSetExtractor<List<Bo
 	public List<BookCopies> readBookCopiesByBook(Book book) {
 		return template.query("SELECT * FROM tbl_book_copies WHERE bookId = ?",
 				new Object[] {book.getBookId()}, this);
+	}
+	
+	// return all book copies of a library branch given branch id
+	public List<BookCopies> readBookCopiesByBranch(LibraryBranch branch) throws SQLException {
+		List<BookCopies> bookCopies = template.query("SELECT * FROM tbl_book_copies WHERE branchId = ?)",
+				new Object[] {branch.getBranchId()}, this);
+		if (bookCopies != null) {
+			return bookCopies;
+		}
+		return null;
 	}
 	
 	@Override

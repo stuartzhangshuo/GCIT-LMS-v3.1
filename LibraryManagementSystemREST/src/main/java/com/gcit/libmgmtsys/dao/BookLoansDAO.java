@@ -12,7 +12,11 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import com.gcit.libmgmtsys.entity.Book;
 import com.gcit.libmgmtsys.entity.BookLoans;
+import com.gcit.libmgmtsys.entity.Borrower;
+import com.gcit.libmgmtsys.entity.LibraryBranch;
+import com.gcit.libmgmtsys.entity.Publisher;
 
 @SuppressWarnings("rawtypes")
 public class BookLoansDAO extends BaseDAO implements ResultSetExtractor<List<BookLoans>>{
@@ -78,6 +82,26 @@ public class BookLoansDAO extends BaseDAO implements ResultSetExtractor<List<Boo
 //						 "WHERE bl.bookId = b.bookId AND bl.branchId = lb.branchId AND bl.cardNo = br.cardNo";
 //			return executeFirstLevelQuery(sql, null);
 //		}
+	}
+	
+	// return all book loans of a library branch given branch id
+	public List<BookLoans> readBookLoanByBranch(LibraryBranch branch) throws SQLException {
+		List<BookLoans> bookLoans = template.query("SELECT * FROM tbl_book_loans WHERE branchId = ?)",
+				new Object[] {branch.getBranchId()}, this);
+		if (bookLoans != null) {
+			return bookLoans;
+		}
+		return null;
+	}
+	
+	// return all book loans of a borrower given cardNo
+	public List<BookLoans> readBookLoanByBorrower(Borrower borrower) throws SQLException {
+		List<BookLoans> bookLoans = template.query("SELECT * FROM tbl_book_loans WHERE cardNo = ? AND dateIn IS NULL)",
+				new Object[] {borrower.getCardNo()}, this);
+		if (bookLoans != null) {
+			return bookLoans;
+		}
+		return null;
 	}
 	
 //	public List<BookLoans> getBookLoansByCardNoAndBranchId(String cardNo, String branchId) {

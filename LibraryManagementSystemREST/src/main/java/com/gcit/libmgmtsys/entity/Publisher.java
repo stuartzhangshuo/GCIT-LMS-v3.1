@@ -7,6 +7,10 @@ package com.gcit.libmgmtsys.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Publisher implements Serializable{
 	
 	private static final long serialVersionUID = 7415855631190283157L;
@@ -26,6 +30,7 @@ public class Publisher implements Serializable{
 	/**
 	 * @param publisherId the publisherId to set
 	 */
+	@XmlElement
 	public void setPublisherId(Integer publisherId) {
 		this.publisherId = publisherId;
 	}
@@ -38,6 +43,7 @@ public class Publisher implements Serializable{
 	/**
 	 * @param publisherName the publisherName to set
 	 */
+	@XmlElement
 	public void setPublisherName(String publisherName) {
 		this.publisherName = publisherName;
 	}
@@ -50,6 +56,7 @@ public class Publisher implements Serializable{
 	/**
 	 * @param publisherAddress the publisherAddress to set
 	 */
+	@XmlElement
 	public void setPublisherAddress(String publisherAddress) {
 		this.publisherAddress = publisherAddress;
 	}
@@ -62,6 +69,7 @@ public class Publisher implements Serializable{
 	/**
 	 * @param publisherPhone the publisherPhone to set
 	 */
+	@XmlElement
 	public void setPublisherPhone(String publisherPhone) {
 		this.publisherPhone = publisherPhone;
 	}
@@ -74,6 +82,7 @@ public class Publisher implements Serializable{
 	/**
 	 * @param books the books to set
 	 */
+	@XmlElement
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}

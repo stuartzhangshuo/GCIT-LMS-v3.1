@@ -38,13 +38,6 @@ public class LibraryBranchDAO extends BaseDAO implements ResultSetExtractor<List
 		return holder.getKey().intValue();
 	}
 	
-//	public Integer addLibraryBranchWithID(LibraryBranch libraryBranch) throws SQLException {
-//		return executeUpdateWithID("INSERT INTO tbl_library_branch (branchName, branchAddress) VALUES(?, ?)",
-//				new Object[] {libraryBranch.getBranchName(), libraryBranch.getBranchAddress()});
-//	}
-	
-	
-	
 	//update the name of a library branch
 	public void updateLibraryBranch(LibraryBranch libraryBranch) throws SQLException {
 		template.update("UPDATE tbl_library_branch SET branchName = ?, branchAddress = ? WHERE branchId = ?",
@@ -98,28 +91,24 @@ public class LibraryBranchDAO extends BaseDAO implements ResultSetExtractor<List
 //		String sql_loans  = "SELECT * FROM tbl_book_loans WHERE branchId = ? AND dateIn IS NULL";
 //		String sql_copies = "SELECT * FROM tbl_book_copies WHERE branchId = ?";
 		List<LibraryBranch> libraryBranches = new ArrayList<>();
-//		BookLoansDAO 		bookLoans  		= new BookLoansDAO(conn);
-//		BookCopiesDAO   	bookCopies 		= new BookCopiesDAO(conn);
 		while (rs.next()) {
 			LibraryBranch libraryBranch = new LibraryBranch();
 			libraryBranch.setBranchId(rs.getInt("branchId"));
 			libraryBranch.setBranchName(rs.getString("branchName"));
 			libraryBranch.setBranchAddress(rs.getString("branchAddress"));
-//			libraryBranch.setBookLoans(bookLoans.executeFirstLevelQuery(sql_loans, new Object[] {libraryBranch.getBranchId()}));
-//			libraryBranch.setBookCopies(bookCopies.executeFirstLevelQuery(sql_copies, new Object[] {libraryBranch.getBranchId()}));
 			libraryBranches.add(libraryBranch);
 		}
 		return libraryBranches;
 	}
 
-	public LibraryBranch readOneLibrayBranchFirstLevel(Integer branchId) throws SQLException {
-		List<LibraryBranch> libraryBranches = template.query("SELECT * FROM tbl_library_branch WHERE branchId = ?", 
-				new Object[] {branchId}, this);
-		if (libraryBranches != null) {
-			return libraryBranches.get(0);
-		}
-		return null;
-	}
+//	public LibraryBranch readOneLibrayBranchFirstLevel(Integer branchId) throws SQLException {
+//		List<LibraryBranch> libraryBranches = template.query("SELECT * FROM tbl_library_branch WHERE branchId = ?", 
+//				new Object[] {branchId}, this);
+//		if (libraryBranches != null) {
+//			return libraryBranches.get(0);
+//		}
+//		return null;
+//	}
 
 	public Integer getLibraryBranchesCount() throws SQLException {
 		return template.queryForObject("SELECT COUNT(*) as COUNT FROM tbl_library_branch", Integer.class);
